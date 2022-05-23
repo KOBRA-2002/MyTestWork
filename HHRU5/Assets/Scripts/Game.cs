@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 using System.Linq;
 
 
@@ -16,9 +17,15 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject buttonAttack;
     [SerializeField] private GameObject buttonPass;
 
+    [SerializeField] private Transform playerUnitPlace;
+    [SerializeField] private Transform enemyUnitPlace;
+
     private int _pointerOnUnitOfEnemy;
 
     private AIManage ai;
+
+    private Vector3 startPlayerPlace;
+    private Vector3 startEnemyPlace;
 
     public int pointerOnUnitOfEnemy // Номер юнита, которым ходит враг (компьютер)
     { 
@@ -69,6 +76,11 @@ public class Game : MonoBehaviour
             AIAction();
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void ChangeOwnAction() // Передает ход
     {
         isPlayerAction = !isPlayerAction;
@@ -76,20 +88,12 @@ public class Game : MonoBehaviour
         if (isPlayerAction)
         {
             PlayerAction();
-            //OffPlayerUI();
-            //OnPassButton();
-            //ownAction.text = "Ваш ход!";
-            //DrawAttentionOnUnitsOfPlayer(pointerOnUnitOfPlayer);
-            //ClearAttentionOnEnemyUnit();
         }
         else
         {
             AIAction();
-            //OffPlayerUI();
-            //ownAction.text = "Ход противника!";
-            //ai.MakeAction();
         }
-
+        
     }
 
     private void AIAction()
@@ -110,33 +114,60 @@ public class Game : MonoBehaviour
 
     public void Pass() // Пропустить ход
     {
-        Debug.Log(pointerOnUnitOfPlayer);
-        EndAction();
-        //ChangeOwnAction();
-    }
-
-    public void AttackEnemyUnit(Unit unit) // Атаковать юнита (данный метод вызывается игроком)
-    {
-        var attackingUnit = GetAttackingUnit();
-        // TODO: Логика боя
-        var damageValue = attackingUnit.damage;
-
-        unit.CauseDamage(damageValue);
-
         EndAction();
     }
 
-    public void AttackPlayerUnit(int unitNumber) // Атаковать юнита с порядковым номером (вызывается AI)
+    public async void AttackEnemyUnit(Unit unit) // Атаковать юнита (данный метод вызывается игроком)
     {
-        //DrawAttentionOnPlayerUnits(unitNumber);
+        var attackingUnit = GetAttackingUnit();
 
-        var unit = playerUnits[unitNumber];
+        // Двигаем юнитов к месту сражения
+        startPlayerPlace = attackingUnit.transform.position;
+        startEnemyPlace = unit.transform.position;
+
+        await attackingUnit.MoveToPlace(playerUnitPlace.position);
+        await unit.MoveToPlace(enemyUnitPlace.position);
+
+        attackingUnit.Attack();
+
+        var damageValue = attackingUnit.damage;
+        unit.CauseDamage(damageValue);
+
+        // Возращаем к начальному положению 
+        await attackingUnit.MoveToPlace(startPlayerPlace);
+        await unit.MoveToPlace(startEnemyPlace);
+
+        EndAction();
+    }
+
+    public async void AttackPlayerUnit() // Атаковать юнита с порядковым номером (вызывается AI)
+    {
+        System.Random rand = new System.Random();
+
+        // ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ (выбор случайного не мертвого игрока)
+        Unit selectedUnit;
+        do
+        {
+            var numberUnit = rand.Next(0, playerUnits.Count);
+            selectedUnit = playerUnits[numberUnit];
+        }
+        while (selectedUnit.isDeath);
 
         var attackingUnit = GetAttackingUnit();
-        // TODO: Логика боя
-        var damageValue = attackingUnit.damage;
 
-        unit.CauseDamage(damageValue);
+        startEnemyPlace = attackingUnit.transform.position;
+        startPlayerPlace = selectedUnit.transform.position;
+
+        await attackingUnit.MoveToPlace(enemyUnitPlace.position);
+        await selectedUnit.MoveToPlace(playerUnitPlace.position);
+
+        attackingUnit.Attack();
+
+        var damageValue = attackingUnit.damage;
+        selectedUnit.CauseDamage(damageValue);
+
+        await attackingUnit.MoveToPlace(startEnemyPlace);
+        await selectedUnit.MoveToPlace(startPlayerPlace);
 
         EndAction();
     }

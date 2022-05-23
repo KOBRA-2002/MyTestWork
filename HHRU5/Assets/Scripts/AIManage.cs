@@ -25,16 +25,12 @@ public class AIManage : MonoBehaviour
 
     private void Pass()
     {
-        Debug.Log("Враг пропустил ход");
         game.Pass();
     }
 
 
     private void AttackUnit()
     {
-        var numberUnit = random.Next(0, 4);
-        Debug.Log("Враг атаковал игрока");
-        //game.DrawAttentionOnPlayerUnits(numberUnit);
-        game.AttackPlayerUnit(numberUnit);
+        game.AttackPlayerUnit();
     }
 }

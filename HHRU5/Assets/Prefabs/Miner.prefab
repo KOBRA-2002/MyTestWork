@@ -359,7 +359,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: Damage
+  _animationName: Idle
   loop: 1
   timeScale: 1
 --- !u!61 &4422993331898038780
