@@ -8,16 +8,32 @@ using System.Linq;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] Text ownAction; // Чей ход
+    [SerializeField] Text winText;
+    /// <summary>
+    /// Чей ход
+    /// </summary>
+    [SerializeField] Text ownAction;
 
+    /// <summary>
+    /// Список юнитов игрока
+    /// </summary>
     [SerializeField] private List<Unit> playerUnits;
+    /// <summary>
+    /// Список юнитов врага
+    /// </summary>
     [SerializeField] private List<Unit> enemyUnits;
 
-    [SerializeField] private GameObject buttonChoiceUnit;
     [SerializeField] private GameObject buttonAttack;
     [SerializeField] private GameObject buttonPass;
 
+    /// <summary>
+    /// Место, где находится юнит игрока, когда сражается
+    /// </summary>
     [SerializeField] private Transform playerUnitPlace;
+
+    /// <summary>
+    /// Место, где находится юнит противника, когда сражается
+    /// </summary>
     [SerializeField] private Transform enemyUnitPlace;
 
     private int _pointerOnUnitOfEnemy;
@@ -26,6 +42,52 @@ public class Game : MonoBehaviour
 
     private Vector3 startPlayerPlace;
     private Vector3 startEnemyPlace;
+
+    private int _deadPlayerUnits = 0;
+
+    /// <summary>
+    /// Конец игры
+    /// </summary>
+    private bool isGameEnd = false;
+
+    /// <summary>
+    /// Количество мертвых юнитов игрока
+    /// </summary>
+    public int deadPlayerUnits
+    {
+        get { return _deadPlayerUnits; }
+        set
+        {
+            _deadPlayerUnits = value;
+            if (_deadPlayerUnits >= playerUnits.Count)
+            {
+                isGameEnd = true;
+                OffPlayerUI();
+                OnLooseText();
+                Debug.Log("Противник выиграл");
+            }
+        }
+    }
+
+    private int _deadEnemyUnits = 0;
+    /// <summary>
+    /// Количество мертвых юнитов противника
+    /// </summary>
+    public int deadEnemyUnits
+    {
+        get { return _deadEnemyUnits; }
+        set
+        {
+            _deadEnemyUnits = value;
+            if (_deadEnemyUnits >= enemyUnits.Count)
+            {
+                isGameEnd = true;
+                OffPlayerUI();
+                OnWinText();
+                Debug.Log("Игрок выиграл выиграл");
+            }
+        }
+    }
 
     public int pointerOnUnitOfEnemy // Номер юнита, которым ходит враг (компьютер)
     { 
@@ -66,9 +128,11 @@ public class Game : MonoBehaviour
 
     public void Start()
     {
+        winText.gameObject.SetActive(false);
+
         _instance = this;
 
-        ai = new AIManage(this);
+        ai = new AIManage(this); // Создать "ИИ" (Тестовый)
 
         if (isPlayerAction)
             PlayerAction();
@@ -76,26 +140,30 @@ public class Game : MonoBehaviour
             AIAction();
     }
 
-    private void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Передать ход
+    /// </summary>
     public void ChangeOwnAction() // Передает ход
     {
-        isPlayerAction = !isPlayerAction;
+        if (!isGameEnd)
+        {
+            isPlayerAction = !isPlayerAction;
 
-        if (isPlayerAction)
-        {
-            PlayerAction();
-        }
-        else
-        {
-            AIAction();
+            StartAction();
+            if (isPlayerAction)
+            {
+                PlayerAction();
+            }
+            else
+            {
+                AIAction();
+            }
         }
         
     }
-
+    /// <summary>
+    /// Ход противника
+    /// </summary>
     private void AIAction()
     {
         OffPlayerUI();
@@ -103,33 +171,46 @@ public class Game : MonoBehaviour
         ai.MakeAction();
     }
 
+    /// <summary>
+    /// Ход игрока
+    /// </summary>
     private void PlayerAction()
     {
         OffPlayerUI();
         OnPassButton();
         ownAction.text = "Ваш ход!";
         DrawAttentionOnUnitsOfPlayer(pointerOnUnitOfPlayer);
-        ClearAttentionOnEnemyUnit();
+        ClearAttentionOnEnemyUnits();
     }
 
+    /// <summary>
+    /// Пропустить ход
+    /// </summary>
     public void Pass() // Пропустить ход
     {
         EndAction();
     }
-
+    /// <summary>
+    /// Бот атакует игрока
+    /// </summary>
+    /// <param name="unit"></param>
     public async void AttackEnemyUnit(Unit unit) // Атаковать юнита (данный метод вызывается игроком)
     {
-        var attackingUnit = GetAttackingUnit();
+        // Получаем юнита, который атакует в этом ходу
+        var attackingUnit = GetAttackingPlayerUnit();
 
-        // Двигаем юнитов к месту сражения
+        // Запоминаем начальные положения юнитов
         startPlayerPlace = attackingUnit.transform.position;
         startEnemyPlace = unit.transform.position;
 
+        // Передвинуть юнитов в место сражения (ассинхронно)
         await attackingUnit.MoveToPlace(playerUnitPlace.position);
         await unit.MoveToPlace(enemyUnitPlace.position);
 
+        // Активируем анимацию
         attackingUnit.Attack();
 
+        // Наносим урон
         var damageValue = attackingUnit.damage;
         unit.CauseDamage(damageValue);
 
@@ -137,9 +218,13 @@ public class Game : MonoBehaviour
         await attackingUnit.MoveToPlace(startPlayerPlace);
         await unit.MoveToPlace(startEnemyPlace);
 
+        // Завершаем текущий ход
         EndAction();
     }
 
+    /// <summary>
+    /// Игрок атакует вражеского юнита
+    /// </summary>
     public async void AttackPlayerUnit() // Атаковать юнита с порядковым номером (вызывается AI)
     {
         System.Random rand = new System.Random();
@@ -153,46 +238,89 @@ public class Game : MonoBehaviour
         }
         while (selectedUnit.isDeath);
 
-        var attackingUnit = GetAttackingUnit();
+        // Получаем юнита, который атакует в этом ходу
+        var attackingUnit = GetAttackinEnemyUnit();
 
+        // Запоминаем начальные положения юнитов
         startEnemyPlace = attackingUnit.transform.position;
         startPlayerPlace = selectedUnit.transform.position;
 
+        // Передвинуть юнитов в место сражения (ассинхронно)
         await attackingUnit.MoveToPlace(enemyUnitPlace.position);
         await selectedUnit.MoveToPlace(playerUnitPlace.position);
 
+        // Активируем анимацию
         attackingUnit.Attack();
 
+        // Наносим урон
         var damageValue = attackingUnit.damage;
         selectedUnit.CauseDamage(damageValue);
 
+        // Возращаем к начальному положению 
         await attackingUnit.MoveToPlace(startEnemyPlace);
         await selectedUnit.MoveToPlace(startPlayerPlace);
 
+        // Завершаем текущий ход
         EndAction();
     }
 
-    private Unit GetAttackingUnit() // Получить юнита, который атакует 
+    /// <summary>
+    /// Получить юнита игрока, которым будет атаковать настоящий игрок (Player)
+    /// </summary>
+    /// <returns></returns>
+    private Unit GetAttackingPlayerUnit()
     {
-        Unit attackingUnit;
-        if (isPlayerAction)
-            attackingUnit = playerUnits[pointerOnUnitOfPlayer];
-        else
-            attackingUnit = enemyUnits[pointerOnUnitOfEnemy];
-        return attackingUnit;
+        return playerUnits[pointerOnUnitOfPlayer];
     }
 
-    private void EndAction() // Закончить ход
+    /// <summary>
+    /// Получить вражеского юнита, которым будет атаковать текущий игрок 
+    /// </summary>
+    /// <returns></returns>
+    private Unit GetAttackinEnemyUnit()
+    {
+        return enemyUnits[pointerOnUnitOfEnemy];
+    }
+
+    /// <summary>
+    /// Начинает ход и выбирает юнита, которым будет ходить текущий игрок
+    /// </summary>
+    private void StartAction()
     {
         if (isPlayerAction)
-            pointerOnUnitOfPlayer++;
-        else
-            pointerOnUnitOfEnemy++;
+        {
+            var isDeath = false;
+            do
+            {
+                pointerOnUnitOfPlayer++;
+                isDeath = playerUnits[pointerOnUnitOfPlayer].isDeath;
 
+            } while (isDeath);
+        }
+        else
+        {
+            var isDeath = false;
+            do
+            {
+                pointerOnUnitOfEnemy++;
+                isDeath = enemyUnits[pointerOnUnitOfEnemy].isDeath;
+
+            } while (isDeath);
+        }
+    }
+    /// <summary>
+    /// Заканчивает ход 
+    /// </summary>
+    private void EndAction()
+    {
         ChangeOwnAction();
     }
 
-    public void DrawAttentionOnUnitsOfPlayer(int numberUnit) // Игрок выделяет своего юнита
+    /// <summary>
+    /// Выделить юнита игрока
+    /// </summary>
+    /// <param name="numberUnit"></param>
+    public void DrawAttentionOnUnitsOfPlayer(int numberUnit) 
     {
         for (int i = 0; i < playerUnits.Count; i++)
         {
@@ -206,7 +334,11 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void DrawAttentionOnEnemyUnit(Unit _unit) // Затемнить всех юнитов противника кроме этого
+    /// <summary>
+    /// Выделить юнита противника
+    /// </summary>
+    /// <param name="_unit"></param>
+    public void DrawAttentionOnEnemyUnit(Unit _unit) 
     {
         foreach (Unit unit in enemyUnits)
         {
@@ -220,9 +352,23 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void ClearAttentionOnEnemyUnit()
+    /// <summary>
+    /// Снять выделение со всех юнитов противника
+    /// </summary>
+    public void ClearAttentionOnEnemyUnits()
     {
         foreach (Unit unit in enemyUnits)
+        {
+            unit.Hide();
+        }
+    }
+
+    /// <summary>
+    /// Снять выделение со всех юнитов игрока
+    /// </summary>
+    public void ClearAttentionOnPlayerUnits()
+    {
+        foreach (Unit unit in playerUnits)
         {
             unit.Hide();
         }
@@ -259,5 +405,17 @@ public class Game : MonoBehaviour
     {
         OnAttackButton();
         OnPassButton();
+    }
+
+    private void OnLooseText()
+    {
+        winText.gameObject.SetActive(true);
+        winText.text = "Противник выиграл";
+    }
+
+    private void OnWinText()
+    {
+        winText.gameObject.SetActive(true);
+        winText.text = "Вы выиграли!";
     }
 }

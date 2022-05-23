@@ -15,12 +15,11 @@ public class AIManage : MonoBehaviour
 
     public void MakeAction() // Сделать ход
     {
+        game.ClearAttentionOnEnemyUnits();
+        game.ClearAttentionOnPlayerUnits();
+
         random = new System.Random();
-        var res = random.Next(0, 20);
-        if (res > 10)
-            Pass();
-        else
-            AttackUnit();
+        AttackUnit();
     }
 
     private void Pass()

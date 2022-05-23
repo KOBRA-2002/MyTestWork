@@ -221,6 +221,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -275,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 1
 --- !u!1 &370719841
 GameObject:
@@ -591,7 +596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 1
 --- !u!1 &636310383
 GameObject:
@@ -689,7 +694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 0
 --- !u!1001 &835496560
 PrefabInstance:
@@ -800,6 +805,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -854,7 +864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 0
 --- !u!1 &986209171 stripped
 GameObject:
@@ -875,7 +885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 0
 --- !u!1 &1172245644
 GameObject:
@@ -973,6 +983,7 @@ RectTransform:
   - {fileID: 1996024603}
   - {fileID: 1314685255}
   - {fileID: 636310386}
+  - {fileID: 2050062523}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -993,6 +1004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b028ac726faa02341bd4177cb8e00144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winText: {fileID: 2050062524}
   ownAction: {fileID: 636310384}
   playerUnits:
   - {fileID: 1175283311}
@@ -1004,7 +1016,6 @@ MonoBehaviour:
   - {fileID: 1831561298}
   - {fileID: 1754626868}
   - {fileID: 231088967}
-  buttonChoiceUnit: {fileID: 0}
   buttonAttack: {fileID: 1996024602}
   buttonPass: {fileID: 1314685254}
   playerUnitPlace: {fileID: 486796471}
@@ -1130,6 +1141,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -1185,7 +1201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 0
 --- !u!1 &1231034192
 GameObject:
@@ -1373,6 +1389,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -1515,6 +1536,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.2995253
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
@@ -1787,6 +1813,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -1931,6 +1962,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ad908c4968f1bf640bca74cf29c98db8, type: 2}
@@ -1985,7 +2021,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 1
 --- !u!1 &1831561296 stripped
 GameObject:
@@ -2006,7 +2042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damageValue: 30
+  damageValue: 60
   isEnemy: 1
 --- !u!1 &1834271206
 GameObject:
@@ -2301,6 +2337,83 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008839169}
   m_CullTransparentMesh: 0
+--- !u!1 &2050062522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2050062523}
+  - component: {fileID: 2050062525}
+  - component: {fileID: 2050062524}
+  m_Layer: 5
+  m_Name: GameEndText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2050062523
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050062522}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1172245648}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.31100002, y: 0.6505823}
+  m_AnchorMax: {x: 0.72, y: 0.809}
+  m_AnchoredPosition: {x: 0.4404602, y: 1}
+  m_SizeDelta: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2050062524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050062522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.09646942, b: 0.07075471, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 40
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 4
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "\u0412\u044B \u0432\u044B\u0438\u0433\u0440\u0430\u043B\u0438!"
+--- !u!222 &2050062525
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050062522}
+  m_CullTransparentMesh: 0
 --- !u!1001 &7094579667600129506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2407,6 +2520,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.29952532
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7094579666426452878, guid: 88061cfdaf08aa04f91ba550971e9836,
         type: 3}

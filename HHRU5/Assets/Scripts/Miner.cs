@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Spine.Unity;
 using System.Threading.Tasks;
+using Spine;
 
 public class Miner : Unit//: MonoBehaviour, IUnit
 {
@@ -47,7 +48,6 @@ public class Miner : Unit//: MonoBehaviour, IUnit
         animationState = skeletonAnimation.AnimationState;
 
         trackIdle = animationState.SetAnimation(0, "Idle", true);
-        //var track = animationState.SetAnimation(0, "Idle", true);
     }
 
 
@@ -65,19 +65,25 @@ public class Miner : Unit//: MonoBehaviour, IUnit
 
     public override void CauseDamage(int damageValue)
     {
-        //Debug.Log("Приченен урон: " + gameObject.name);
-        animationState.SetAnimation(0, "Damage", false);
+        var t = animationState.SetAnimation(0, "Damage", false);
+        t.Complete += (Spine.TrackEntry trackEntry) => animationState.SetAnimation(0, "Idle", true);
+
         health -= damageValue;
         healthBar.SetHeath(health);
-        if (health < 0)
+        if (health <= 0)
             Die();
     }
 
     private void Die()
     {
+        if (isEnemy)
+            Game.instance.deadEnemyUnits++;
+        else
+            Game.instance.deadPlayerUnits++;
         Debug.Log("Смерть юнита: " + gameObject.name);
         isDeath = true;
         gameObject.SetActive(false);
+
     }
 
     public override void ChoiceUnit()
@@ -111,6 +117,7 @@ public class Miner : Unit//: MonoBehaviour, IUnit
 
     public override void Attack()
     {
-        animationState.SetAnimation(0, "PickaxeCharge", false);
+        var t = animationState.SetAnimation(0, "PickaxeCharge", false);
+        t.Complete += (Spine.TrackEntry trackEntry) => animationState.SetAnimation(0, "Idle", true); 
     }
 }

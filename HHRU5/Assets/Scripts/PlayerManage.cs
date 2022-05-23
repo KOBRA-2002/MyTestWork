@@ -19,13 +19,13 @@ public class PlayerManage : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
+            // Если игрок выбрал юнита
             if (hit.collider != null)
             {
-                //Debug.Log("Target: " + hit.collider.gameObject.name);
-                var unit = hit.collider.gameObject.GetComponent<Unit>();
+                var unit = hit.collider.gameObject.GetComponent<Unit>(); 
+                // Если юнит жив и является вражеским юнитом
                 if (unit.isEnemyUnit && !unit.isDeath)
                 {
-                    //Debug.Log("Игрок выбрал атакуемого юнита");
                     currentAttackedUnit = unit;
                     game.OnAttackButton();
                     game.DrawAttentionOnEnemyUnit(unit);
@@ -42,7 +42,6 @@ public class PlayerManage : MonoBehaviour
         game.AttackEnemyUnit(currentAttackedUnit);
         game.OffAttackButton();
         game.OffPassButton();
-        //Debug.Log("Атака");
     }
 
     public void ClickPass()
